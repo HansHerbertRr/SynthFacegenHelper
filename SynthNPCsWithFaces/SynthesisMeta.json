@@ -1,7 +1,7 @@
 {
   "Nickname": "SynthFacegenHelper",
   "Visibility": "Visible",
-  "OneLineDescription": "Helper for creting Facegen",
+  "OneLineDescription": "Helper for creating Facegen",
   "LongDescription": "Creates a new plugin with relevant NPC records for generating facegen",
   "PreferredAutoVersioning": "Default",
   "RequiredMods": []
