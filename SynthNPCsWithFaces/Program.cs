@@ -61,7 +61,7 @@ namespace SynthNPCsWithFaces
                 .WinningOverrides()
                 .Where(npc => races.ContainsKey(npc.Race.FormKey))
                 .Where(npc => npc.Template.IsNull || !npc.Configuration.TemplateFlags.HasFlag(NpcConfiguration.TemplateFlag.Traits))
-                .Where(npc => !npc.Configuration.TemplateFlags.HasFlag(NpcConfiguration.TemplateFlag.IsChargenFacePreset))
+                .Where(npc => !npc.Configuration.Flags.HasFlag(NpcConfiguration.Flag.IsChargenFacePreset))
                 .Where(npc => npc.FormKey != burnedAstrid)
                 .Where(npc =>
                 {
