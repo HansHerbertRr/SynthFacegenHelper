@@ -43,7 +43,8 @@ namespace SynthNPCsWithFaces
                 .ToDictionary(r => r.FormKey);
 
             // AstridEnd [NPC_:0004D6D0] in Skyrim.esm.
-            var burnedAstrid = new FormKey(new ModKey("Skyrim", ".esm"), 0x04D6D0);
+            var modKey = ModKey.FromFileName("Skyrim.esm");
+            var burnedAstrid = new FormKey(modKey, 0x04D6D0);
 
             /*
              * An NPC is included only when all of the following are true:
