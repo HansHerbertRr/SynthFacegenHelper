@@ -15,7 +15,7 @@ namespace SynthNPCsWithFaces
                 {
                     ActionsForEmptyArgs = new RunDefaultPatcher()
                     {
-                        IdentifyingModKey = "SynthNPCsWithFaces.esp",
+                        IdentifyingModKey = "SynthFacegenHelper.esp",
                         TargetRelease = GameRelease.SkyrimSE,
                     }
                 });
@@ -61,7 +61,7 @@ namespace SynthNPCsWithFaces
                 .WinningOverrides()
                 .Where(npc => races.ContainsKey(npc.Race.FormKey))
                 .Where(npc => npc.Template.IsNull || !npc.Configuration.TemplateFlags.HasFlag(NpcConfiguration.TemplateFlag.Traits))
-                .Where(npc => !npc.Configuration.IsCharGenFacePreset)
+                .Where(npc => !npc.Configuration.Flags.HasFlag(NpcConfiguration.Flag.ChargenFacePreset))
                 .Where(npc => npc.FormKey != burnedAstrid)
                 .Where(npc =>
                 {
