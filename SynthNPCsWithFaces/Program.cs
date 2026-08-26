@@ -51,9 +51,8 @@ namespace SynthNPCsWithFaces
              * 1. Its race has a FaceGen head.
              * 2. Its race is not a child race.
              * 3. It does NOT have a template with Use Traits enabled.
-             * 4. It is NOT marked Is CharGen Face Preset.
-             * 5. It is NOT Burned Astrid.
-             * 6. If it is a stock NPC, its winning record differs from the vanilla record.
+             * 4. It is NOT Burned Astrid.
+             * 5. If it is a stock NPC, its winning record differs from the vanilla record.
              *
              * Mod-added NPCs are included as long as they satisfy the other criteria.
              */
@@ -61,7 +60,6 @@ namespace SynthNPCsWithFaces
                 .WinningOverrides()
                 .Where(npc => races.ContainsKey(npc.Race.FormKey))
                 .Where(npc => npc.Template.IsNull || !npc.Configuration.TemplateFlags.HasFlag(NpcConfiguration.TemplateFlag.Traits))
-                .Where(npc => !npc.Configuration.Flags.HasFlag(NpcConfiguration.Flag.IsChargenFacePreset))
                 .Where(npc => npc.FormKey != burnedAstrid)
                 .Where(npc =>
                 {
