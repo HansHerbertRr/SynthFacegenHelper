@@ -22,13 +22,6 @@ namespace SynthNPCsWithFaces
         }
 
         var modSkyrim = ModKey.FromFileName("Skyrim.esm");
-
-        var excludedRaces = new HashSet<FormKey>
-        {
-            new FormKey(modKey, 0x071E6A), // InvisibleRace
-            new FormKey(modKey, 0x000019), // DefaultRace
-            new FormKey(modKey, 0x10760A), // ManakinRace
-        };
         
         public static void RunPatch(IPatcherState<ISkyrimMod, ISkyrimModGetter> state)
         {
@@ -36,8 +29,10 @@ namespace SynthNPCsWithFaces
             var races = state.LoadOrder.PriorityOrder.Race()
                 .WinningOverrides()
                 .Where(race => race.Flags.HasFlag(Race.Flag.FaceGenHead))
-                .Where(race => !race.Flags.HasFlag(Race.Flag.Child))
-                .Where(race => !excludedRaces.Contains(race.FormKey))
+                .Where(race => !race.Flags.HasFlag(Race.Flag.Child)) 
+                .Where(race => !race.Flags.HasFlag(Race.Flag.InvisibleRace))
+                .Where(race => !race.Flags.HasFlag(Race.Flag.DefaultRace))
+                .Where(race => !race.Flags.HasFlag(Race.Flag.ManakinRace))
                 .ToDictionary(race => race.FormKey);
 
             Console.WriteLine($"Found {races.Count} races");
