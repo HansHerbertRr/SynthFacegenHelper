@@ -25,20 +25,15 @@ namespace SynthNPCsWithFaces
         {
 
             var modSkyrim = ModKey.FromFileName("Skyrim.esm");
-
-            var excludedRaces = new HashSet<FormKey>
-            {
-                new FormKey(modSkyrim, 0x071E6A), // InvisibleRace
-                new FormKey(modSkyrim, 0x000019), // DefaultRace
-                new FormKey(modSkyrim, 0x10760A), // ManakinRace
-            };
             
             // Only races capable of having a FaceGen head are considered.
             var races = state.LoadOrder.PriorityOrder.Race()
                 .WinningOverrides()
                 .Where(race => race.Flags.HasFlag(Race.Flag.FaceGenHead))
                 .Where(race => !race.Flags.HasFlag(Race.Flag.Child)) 
-                .Where(race => !excludedRaces.Contains(race.FormKey))
+                .Where(race => !race.Flags.HasFlag(Race.Flag.Invisible))
+                .Where(race => !race.Flags.HasFlag(Race.Flag.Default))
+                .Where(race => !race.Flags.HasFlag(Race.Flag.Manakin))
                 .ToDictionary(race => race.FormKey);
 
             Console.WriteLine($"Found {races.Count} races");
@@ -59,8 +54,10 @@ namespace SynthNPCsWithFaces
              * 1. Its race has a FaceGen head.
              * 2. Its race is not a child race.
              * 3. It does NOT have a template with Use Traits enabled.
-             * 4. It is NOT Burned Astrid.
-             * 5. If it is a stock NPC, its winning record differs from the vanilla record.
+             * 4. It is NOT marked Is CharGen Face Preset.
+             * 5. It is NOT Burned Astrid (AstridEnd)
+             * 6. It is NOT the Player
+             * 7. If it is a stock NPC, its winning record differs from the vanilla record.
              *
              * Mod-added NPCs are included as long as they satisfy the other criteria.
              */
