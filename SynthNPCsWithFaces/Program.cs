@@ -23,18 +23,25 @@ namespace SynthNPCsWithFaces
         
         public static void RunPatch(IPatcherState<ISkyrimMod, ISkyrimModGetter> state)
         {
+
+            var modSkyrim = ModKey.FromFileName("Skyrim.esm");
+
+            var excludedRaces = new HashSet<FormKey>
+            {
+                new FormKey(modSkyrim, 0x071E6A), // InvisibleRace
+                new FormKey(modSkyrim, 0x000019), // DefaultRace
+                new FormKey(modSkyrim, 0x10760A), // ManakinRace
+            };
+            
             // Only races capable of having a FaceGen head are considered.
             var races = state.LoadOrder.PriorityOrder.Race()
                 .WinningOverrides()
                 .Where(race => race.Flags.HasFlag(Race.Flag.FaceGenHead))
                 .Where(race => !race.Flags.HasFlag(Race.Flag.Child)) 
-                .Where(race => !race.Flags.HasFlag(Race.Flag.InvisibleRace))
-                .Where(race => !race.Flags.HasFlag(Race.Flag.DefaultRace))
-                .Where(race => !race.Flags.HasFlag(Race.Flag.ManakinRace))
+                .Where(race => !excludedRaces.Contains(race.FormKey))
                 .ToDictionary(race => race.FormKey);
 
             Console.WriteLine($"Found {races.Count} races");
-
 
             var vanillaNPCs = state.LoadOrder.PriorityOrder
                 .TakeLast(Extensions.StockESMs.Count)
@@ -42,7 +49,7 @@ namespace SynthNPCsWithFaces
                 .WinningOverrides()
                 .ToDictionary(r => r.FormKey);
 
-            var modSkyrim = ModKey.FromFileName("Skyrim.esm");
+            
             var burnedAstrid = new FormKey(modSkyrim, 0x04D6D0);
             var player = new FormKey(modSkyrim, 0x000007);
 
