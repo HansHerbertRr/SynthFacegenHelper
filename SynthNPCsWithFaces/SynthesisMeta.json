@@ -1,8 +1,8 @@
 {
-  "Nickname": "SynthNPCsWithFaces",
+  "Nickname": "SynthFacegenHelper",
   "Visibility": "Visible",
-  "OneLineDescription": "Helper patcher for TPF",
-  "LongDescription": "Creates a new plugin with all the modified NPC records, useful for building NPC merges",
+  "OneLineDescription": "Helper for creting Facegen",
+  "LongDescription": "Creates a new plugin with relevant NPC records for generating facegen",
   "PreferredAutoVersioning": "Default",
   "RequiredMods": []
 }
