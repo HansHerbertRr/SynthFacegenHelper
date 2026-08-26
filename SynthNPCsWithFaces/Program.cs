@@ -31,7 +31,7 @@ namespace SynthNPCsWithFaces
                 .WinningOverrides()
                 .Where(race => race.Flags.HasFlag(Race.Flag.FaceGenHead))
                 .Where(race => !race.Flags.HasFlag(Race.Flag.Child)) 
-                .Where(race => !race.Flags.HasFlag(Race.Flag.Invisible))
+                .Where(race => !race.Name == InvisibleRace))
                 .Where(race => !race.Flags.HasFlag(Race.Flag.Default))
                 .Where(race => !race.Flags.HasFlag(Race.Flag.Manakin))
                 .ToDictionary(race => race.FormKey);
