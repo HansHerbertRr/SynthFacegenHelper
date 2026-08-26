@@ -20,8 +20,6 @@ namespace SynthNPCsWithFaces
                     }
                 });
         }
-
-        var modSkyrim = ModKey.FromFileName("Skyrim.esm");
         
         public static void RunPatch(IPatcherState<ISkyrimMod, ISkyrimModGetter> state)
         {
@@ -44,7 +42,7 @@ namespace SynthNPCsWithFaces
                 .WinningOverrides()
                 .ToDictionary(r => r.FormKey);
 
-            
+            var modSkyrim = ModKey.FromFileName("Skyrim.esm");
             var burnedAstrid = new FormKey(modSkyrim, 0x04D6D0);
             var player = new FormKey(modSkyrim, 0x000007);
 
