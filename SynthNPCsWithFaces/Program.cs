@@ -21,16 +21,23 @@ namespace SynthNPCsWithFaces
                 });
         }
 
+        var modSkyrim = ModKey.FromFileName("Skyrim.esm");
+
+        var excludedRaces = new HashSet<FormKey>
+        {
+            new FormKey(modKey, 0x071E6A), // InvisibleRace
+            new FormKey(modKey, 0x000019), // DefaultRace
+            new FormKey(modKey, 0x10760A), // ManakinRace
+        };
+        
         public static void RunPatch(IPatcherState<ISkyrimMod, ISkyrimModGetter> state)
         {
-            /*
-             * Only races capable of having a FaceGen head are considered.
-             * Child races are explicitly excluded.
-             */
+            // Only races capable of having a FaceGen head are considered.
             var races = state.LoadOrder.PriorityOrder.Race()
                 .WinningOverrides()
                 .Where(race => race.Flags.HasFlag(Race.Flag.FaceGenHead))
                 .Where(race => !race.Flags.HasFlag(Race.Flag.Child))
+                .Where(race => !excludedRaces.Contains(race.FormKey))
                 .ToDictionary(race => race.FormKey);
 
             Console.WriteLine($"Found {races.Count} races");
@@ -42,9 +49,9 @@ namespace SynthNPCsWithFaces
                 .WinningOverrides()
                 .ToDictionary(r => r.FormKey);
 
-            // AstridEnd [NPC_:0004D6D0] in Skyrim.esm.
-            var modKey = ModKey.FromFileName("Skyrim.esm");
-            var burnedAstrid = new FormKey(modKey, 0x04D6D0);
+            
+            var burnedAstrid = new FormKey(modSkyrim, 0x04D6D0);
+            var player = new FormKey(modSkyrim, 0x000007);
 
             /*
              * An NPC is included only when all of the following are true:
@@ -61,7 +68,9 @@ namespace SynthNPCsWithFaces
                 .WinningOverrides()
                 .Where(npc => races.ContainsKey(npc.Race.FormKey))
                 .Where(npc => npc.Template.IsNull || !npc.Configuration.TemplateFlags.HasFlag(NpcConfiguration.TemplateFlag.Traits))
+                .Where(npc => !npc.Configuration.Flags.HasFlag(NpcConfiguration.Flag.IsCharGenFacePreset))
                 .Where(npc => npc.FormKey != burnedAstrid)
+                .Where(npc => npc.FormKey != player)
                 .Where(npc =>
                 {
                     if (vanillaNPCs.TryGetValue(npc.FormKey, out var vanillaNPC))
