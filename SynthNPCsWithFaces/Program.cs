@@ -25,15 +25,19 @@ namespace SynthNPCsWithFaces
         {
 
             var modSkyrim = ModKey.FromFileName("Skyrim.esm");
+
+            var defaultRace = new FormKey(modSkyrim, 0x000019);
+            var InvisibleRace = new FormKey(modSkyrim, 0x071E6A);
+            var manakinRace = new FormKey(modSkyrim, 0x10760A);
             
             // Only races capable of having a FaceGen head are considered.
             var races = state.LoadOrder.PriorityOrder.Race()
                 .WinningOverrides()
                 .Where(race => race.Flags.HasFlag(Race.Flag.FaceGenHead))
                 .Where(race => !race.Flags.HasFlag(Race.Flag.Child)) 
-                .Where(race => race.Name != Invisible)
-                .Where(race => race.Name != Default)
-                .Where(race => race.Name != Manakin)
+                .Where(race => race.FormKey != defaultRace)
+                .Where(race => race.FormKey != InvisibleRace)
+                .Where(race => race.FormKey != manakinRace)
                 .ToDictionary(race => race.FormKey);
 
             Console.WriteLine($"Found {races.Count} races");
